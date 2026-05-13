@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+.idea/
+.vscode/
+
+# Generated visualization output
+cantilever_data.js
+cantilever_pinn_viz.html

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PINN 悬臂梁 — 交互可视化</title>
+<link rel="stylesheet" href="cantilever_style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="header">
+  <h1>PINN 悬臂梁 — 物理仿真 vs 代理模型</h1>
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">物理最大形变</div>
+      <div class="metric-val blue" id="hdr-phys">{{HDR_PHYS}}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">代理模型预测</div>
+      <div class="metric-val red" id="hdr-surr">{{HDR_SURR}}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">物理仿真耗时</div>
+      <div class="metric-val red">{{SIM_MS}}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">代理模型耗时</div>
+      <div class="metric-val green">{{INFER_MS}}</div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="card">
+    <div class="card-title">挠度曲线对比（实时交互）</div>
+    <div class="beam-wrap">
+      <canvas id="beamCanvas"></canvas>
+      <div class="legend-row" style="justify-content:center; margin-top:10px;">
+        <span class="leg" style="border: 1px solid #185FA5; padding: 4px 12px; border-radius: 12px;">
+          物理仿真基准
+        </span>
+        <span class="leg" style="border: 1px solid #A32D2D; padding: 4px 12px; border-radius: 12px;">
+          代理模型预测
+        </span>
+      </div>
+    </div>
+    <div class="sliders">
+      <div class="sl-row">
+        <span class="sl-label">末端施加力 (N)</span>
+        <input type="range" id="sl-F" min="100" max="3000" step="10" value="752">
+        <span class="sl-val" id="lbl-F">752</span>
+      </div>
+      <div class="sl-row">
+        <span class="sl-label">悬臂梁长度 (m)</span>
+        <input type="range" id="sl-L" min="0.5" max="5" step="0.1" value="1.7">
+        <span class="sl-val" id="lbl-L">1.7</span>
+      </div>
+      <div class="sl-row">
+        <span class="sl-label">材料抗弯刚度 (Nm²)</span>
+        <input type="range" id="sl-EI" min="1000" max="100000" step="500" value="38952">
+        <span class="sl-val" id="lbl-EI">38952</span>
+      </div>
+      <div class="sl-row" style="justify-content:flex-end">
+        <button class="reset" id="btn-reset">重置参数</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">PINN 预测 vs 解析解（无量纲训练数据）</div>
+    <div class="chart-wrap">
+      <canvas id="compChart" role="img" aria-label="PINN预测与解析解对比折线图"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">逐点绝对误差 |y_PINN − y_exact|</div>
+    <div class="chart-wrap">
+      <canvas id="errChart" role="img" aria-label="沿梁长逐点绝对误差"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">训练损失历史（对数轴）</div>
+    <div class="chart-wrap">
+      <canvas id="lossChart" role="img" aria-label="训练损失曲线"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<script src="cantilever_data.js"></script>
+<script src="cantilever_app.js"></script>
+</body>
+</html>
